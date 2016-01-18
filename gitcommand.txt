@@ -1,0 +1,32 @@
+git add filename
+git commit -m filename
+git commit -am filename
+
+git reset filename
+git checkout filename
+git checkout HEAD filename
+
+git rm filename
+git rm --cache filename
+git mv filename
+git stash
+git stash list
+git stash pop
+
+tree-ish
+git cat-file -t HEAD
+git cat-file -p HEAD
+
+git rev-parse HEAD~1&
+git show HEAD~4:code.py
+
+git branch //list branch
+git branch new_branch //create new branch
+git branch //list again
+git checkout new_branch //switch to new branch 
+cat .git/HEAD
+git branch -d new_branch
+git checkout -b new_branch
+git checkout master
+git merge new_branch
+
