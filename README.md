@@ -15,3 +15,4 @@ The project has no code but only study document.
 Java|JavaScript|Python| Shell
 :---:|:---:|:---:|:---:
 30%|30%|20%|20%|
+Any others
