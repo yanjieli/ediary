@@ -1,0 +1,115 @@
+﻿refspec
+git push origin srcBranch:destBranch
+git pull origin srcBranch:destBranch
+git tag
+git tag -a v1.0 -m "Create first version for git"
+git tag -l
+git show <tag name>
+git push origin --tags
+git push origin :refs/tags/v1.9
+git push origin --delete tag v3.0
+git push origin refs/tags/v7.0:refs/tags/v7.0
+git remote prune origin
+git gc
+git remote rename origin origin2
+
+21 bare  submodule
+git init --bare
+git submodule add git@github.com:parent/parent.git mymodule
+git submodule foreach git pull
+git submodule init
+git submodule update --recursive
+git clone git@github.com:parent/parent.git parent3 --recursive
+
+git rm --cached mymodule
+rm -rf mymodule
+git push
+
+git remote add subtree-origin git@github.com:git_subtree/git_subtree_child.git
+git subtree add --prefix=subtree subtree-origin master --squash
+squash merge时候把别人的提交合并为一个提交点merge下来,要么全用，要么全不用。
+git subtree push --prefix=subtree subtree-origin master
+git subtree pull --prefix=subtree subtree-origin master
+step1. Create the git parent repository and project
+1.Github create repository
+2.Local git init repository and create git project
+3.Setup local git config --local parameter
+4.Use git remote add origin git@github.com:gituser/git_subtree_parament.git
+5.Use git push --set-upstream origin master
+6.Add a file and git push it to remote repository
+step2.Create the git child repository and project
+1.Github create repository
+2.Local git init repository and create git project
+3.Setup local git config --local parameter
+4.Use git remote add origin git@github.com:gituser/git_subtree_child.git
+5.Use git push --set-upstream origin master
+6.Add a file and git push it to remote repository
+
+step3.Correlate the parent and child project by git subtree scripts
+1.Create the subtree in parent project.Total 3 method could be found as below:
+git subtree add -P subtree
+git subtree add --prefix=subtree
+git subtree add --prefix subtree
+2.Create the remote correlation as below command
+git remote add subtree-origin git@github.com:gituser/gitsubtree_child.git
+
+step4. Child project modify and push project
+git push
+
+step5. Back to parent project and 
+git subtree add -P subtree subtree-origin master --squash
+cd subtree && ls
+git subtree pull -P subtree subtree-origin master --squash
+
+25
+git cherry-pick
+git cherry-pick <commitid>
+
+26 rebase 变基 衍合
+
+
+30
+gradle gretty plugin
+
+gradle appRun
+gradle appRunDebug
+
+buildscript{
+    repository{
+	    mavenCenter()
+	}
+	dependencies{
+	    classpath 'org.akikh1.gretty:gretty:1.2.4'
+	}
+}
+
+gretty{
+  httpEnabled = true
+  servletContainer = "tomcat8"
+  contextPath = "/mygradle"
+  host = "localhost"
+  httpPort = 8080
+  scanInterval = 1
+  fastReload = true
+  inplaceMode = "soft"
+  loggingLevel = "DEBUG"
+  consoleLogEnabled = true
+  
+  debugPort = 6005 
+  debugSuspend = true 
+}
+
+git init
+git config --local user.name "zhangsan"
+git config --local user.email "zhangsan@git.com"
+git remote add origin master git@github.com:username/git_test.git
+git set-upstream origin master
+
+git add .
+git commit -m "Initial submit"
+git push
+
+
+34 Gitlab install
+http://about.gitlab.com/download
+https://packages.gitlab.com/gitlab/gitlab-ce/packages/el/7/gitlab-ce-11.11.3-ce.0.el7.x86_64.rpm
