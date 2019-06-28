@@ -1,0 +1,27 @@
+[global]
+   workgroup = NSN-INTRA
+   server string = WZQ Samba Server Version %v
+   netbios name = nio132
+   log file = /var/log/samba/log.%m
+   security = user
+   map to guest = Bad User
+   guest account = nobody
+
+[public]
+   comment = share
+   path = /alcatel/backup/share
+   public = yes
+   guest ok = yes
+
+[transfer]
+   comment = share
+   path = /alcatel/backup/transfer
+   public = yes
+   guest ok = yes
+   writeable = yes
+
+[linux]
+   comment = share
+   path = /alcatel/backup/linux_share
+   public = yes
+   guest ok = yes
