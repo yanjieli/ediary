@@ -1,0 +1,10 @@
+nvm introduce
+1. nvm ls
+2. nvm ls-remote
+3. nvm install <version>
+4. nvm use <version>
+
+npm install -g cnpm --registry=https://registry.npm.taobao.org
+
+chrome 配置vue插件的调试环境
+https://chrome-extension-downloader.com

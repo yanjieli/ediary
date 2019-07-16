@@ -1,0 +1,84 @@
+How to install the vue develop tools in chrome.
+1.https://github.com/vuejs/vue-devtools
+2.npm run dev
+3.cd chrome,change the manifest.json 
+"persistent": false->"persistent": true
+4.open chrome,setting,extension,loadpack to select the folder of the chrome to install the vue dev tools.
+
+How to use the nvm cli to install vue framework
+0.node -v 或者 npm -v
+  确认node和npm版本是正确的。
+
+1.npm config edit
+  正确配置registry仓库
+
+2.npm install --global vue-cli   vue2.0安装
+npm install --global @vue/cli  vue3.0安装
+
+abbrevate npm i -g vue-cli
+vue --version
+ 
+3.vue init webpack myproject
+  vue create myproject2   vue3.0执行此命令
+
+4.cd myproject & npm run dev  vue2.0命令
+  cd myproject & npm run serve vue3.0命令
+
+5 vue ui   vue3.0命令
+可以通过页面创建工程
+
+vscode 开发vue工程。
+安装插件，
+jshint，vscode安装完插件后再npm install --global jshint
+vetur插件,之间安装即可
+Beautify插件
+
+setting.json文件里加上"vetur.format.defaultFormatter.js": "vscode-typescript"
+eslintrc.js文件的rules里加上"space-before-function-paren": 0,
+
+vue extension id nhdogjmejiglipccpnnnanhbledajbpd
+https://chrome-extension-downloader.com/
+
+
+vue 文件结构 template script style
+<div v-html="template"></div>
+<a v-bind:href="url">baidu</a>
+<button v-on:click="submit()">
+v-on:@
+v-bind :
+<script>
+    new Vue({
+       el:'#app/.bg',
+       data:{
+          url:'www.baidu.com',
+          template:'<div>hello template!</div>'
+       },
+       methods:{
+          submit:function(){
+          }
+       }，
+       watch：{
+          msg:function(newval,oldval){
+          }
+       }
+    })
+</script>
+计算属性computed：
+侦听器：watch：
+两者区别。watch只管监听的值，computed只要
+
+条件渲染 v-if v-else v-if v-show
+列表渲染 v-for 
+class 与 style的绑定
+<div v-bind:style="styleMSG"></div>
+<div v-bind:style="{color:red}"></div>
+<div v-for="item in list">
+    <div v-bind:class="['active','add','more',{'another':item.age < 30}]" v-bind:style="{color:red}"></div>
+</div>
+
+
+vuex: 组件状态管理
+vue-router：多组件的混合使用，多页面，复杂业务
+props emis/on bus 组件间的传参
+
+

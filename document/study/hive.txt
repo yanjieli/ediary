@@ -1,0 +1,137 @@
+https://www.catpasswd.com
+Hive
+数据仓库是将多个数据源的数据经过ETL(Extract,Transform,Load)处理后，按照一定的主题集成起来提供决策支持和联机分析应用的结构化数据环境。
+OLAP数据查询引擎presto，impala等
+SQOOP数据仓库的输入工具，presto，数据仓库的输出工具
+HIVE基于hadoop的开源数据仓库查询工具，对存储在hdfs上的文件数据进行查询，提供了类sql语法。hive sql转换成MapReduce任务，在hadoop层进行执行。
+Hive是将存储在hdfs上的数据映射成一张张的表，库和表的元数据信息一般存在关系型数据库中。
+Hive语句执行过程：将HQL转换成为Mapreduce任务运行
+OLTP OLAP区别
+hadoop对应如下服务可用jps查看
+hive的下载解压和配置，需要配置两个参数
+hive-env.sh 对应hive-env.sh.template
+hive-site.xml 对应hive-default.xml.template
+vi hive-env.sh
+export JDK_HOME=/
+export HADOOP_HOME=/
+vi hive-site.xml
+<configuration>
+<property>
+   <name>javax.jdo.option.ConnectionURL</name>
+   <value>jdbc:mysql://localhost:3306/metastore?createDatabaseIfNotExist=true</value>
+   <description>the URL of the Mysql database<description>
+</property>
+</configuration>
+
+创建HDFS的hive
+cd /usr/local/hadoop-2.7.7/bin
+1 ./hdfs dfs -ls /
+2 ./hdfs dfs -ls /
+3 
+./hdfs dfs -mkdir /hive
+./hdfs dfs -mkdir /hive/tmp
+./hdfs dfs -mkdir /hive/warehouse
+./hdfs dfs -mkdir /hive/log
+4. 
+./hdfs dfs -chmod -R 777 /hive
+5.查看hdfs信息
+./hdf dfs -ls /hive
+6.创建hive相关的元数据信息,只需要执行schematool命令即可。
+首先将mysql-connector-java.jar包放置在hive的lib目录下/usr/local/apache-hive-2.3.4-bin/lib
+cd /usr/local/apache-hive-2.3.4-bin/bin
+执行initSchema,创建hiveenv hiveset
+./schematool -dbType mysql -initSchema
+7.启动hive的metastore数据仓库(采用nohup方式启动，后台常驻服务)
+nohup ./hive --services metastore &
+
+8.进入hive测试安装是否成功
+./hive
+hive>show databases;
+
+9.hive操作内部表
+通过hive的clint操作下hive
+./hive
+hive>show databases;
+hive>use default;
+hive>show tabels;
+hive>create table table1(id int, name string, interst arry<string>,scoremap<string,string>) row format delimited fields terminated by ',' collection items terminated by '-' map keys terminated by ':' store as textfile;
+hive>show tables;
+hive>load data local inpath '/root/testdata.txt' overwirte into table table1;
+hive>select *from tables1;
+执行hdfs命令查看是否数据加载到hdfs当中。
+./hdfs dfs -ls /hive/warehouse
+./hdfs dfs -ls /hive/warehouse/table1
+
+10.hive操作外部表
+hdfs dfs -mkdir /testtable
+hdfs dfs -copyFromLocal /root/testdata.txt /testtable/
+hdfs dfs -ls /testtable
+./hive
+hive>create external table table2(id int,name string,interest arry<string>,score map<string,strning>) row format delimited fields terminated by ',' collection items terminated by '-' map keys terminated by ':' location '/testtable';
+desc formatted table2
+select * from table2;
+
+11.删除内部表和外部表
+drop table table1
+drop table table2
+hdfs dfs -ls /testtable
+hdfs dfs -ls /hive/warehouse
+删除内部表，元数据文件也删除了
+删除外部表，元数据文件依然存在
+
+12.表分区
+hive>create external table table2(id int,name string,interest arry<string>,score map<string,strning>) partitioned by (year int) row format delimited fields terminated by ',' collection items terminated by '-' map keys terminated by ':' stored as textfile;
+hive>load data local inpath '/root/testdata.txt' into table table1 partition(year=2018);
+hive>show paritions table1;
+hive> alter table table1 add partition (year-2019) location '/testtable';
+show partitions table1;
+select *from table1;
+alter table table1 drop partition (year=2019);
+show partitions table1;
+
+13.Hive 存储格式，分为三种。
+textfile简单方便查看，不支持分片
+sequencefile可压缩分片，需要合并不易查看
+orcfile 分片按列查询不易查看但速度快
+
+数据仓库主要关注的是查询分析，对更新不太关注，所以采用列式存储更有效果。
+列式存储的有点事提高IO查询效率，支持分片，流式读取，适用于分布式的文件存储特性。
+目前主流的列式存储项目有orc和parquet
+
+
+14 sqoop sqoop.apache.org
+一种ETL工具，可以将关系型数据库加载到hadoop集群，同时也支持从hdfs中把数据加载到关系型数据库中。
+sqoop import RDBMS表中的每一行都被映射为HDFS的记录
+sqoop Export 读取并按照指定分隔符解析数据插入RDBMS
+sqoop job 将导入导出保存成job方便下次执行。
+安装配置。conf/sqoop.template.sh
+.bin/sqoop list-databases --connect jdbc:mysql://localhost:3306 --username root --password 123456
+.bin/sqoop list-tables --connect jdbc:mysql://localhost:3306/metastore --username root --password 123456
+
+实现mysql和hdfs之间的数据导入导出举例如下：
+./sqoo import --coonet jdbc:mysql://localhost:3306/sqooptest --username root --password password --table testtable --driver com.mysql.jdbc.Driver --target-dir /testtable
+./sqoo import --coonet jdbc:mysql://localhost:3306/sqooptest --username root --password password --table testtable --driver com.mysql.jdbc.Driver --split-by id --target-dir /testtable
+/bin/hdfs dfs -ls /testtable
+./sqoo import --coonet jdbc:mysql://localhost:3306/sqooptest --username root --password password --table testtable --driver com.mysql.jdbc.Driver --split-by id --num-mappers 1 --target-dir /testtable
+/bin/hdfs dfs -ls /testtable
+./sqoo import --coonet jdbc:mysql://localhost:3306/sqooptest --username root --password password --table testtable --driver com.mysql.jdbc.Driver --column id,name --num-mappers 1 --target-dir /testtable
+./sqoo import --coonet jdbc:mysql://localhost:3306/sqooptest --username root --password password --driver com.mysql.jdbc.Driver --query "select * from testtable where id>2 and $CONDITIONS" --num-mappers 1 --target-dir /testtable
+
+
+
+./sqoop export --connect jdbc:mysql://lcoalhost:3306/sqooptest --username root --password passowrd --table testtable2 --export-dir /testtable2
+
+实现mysql和hive之间的数据导入导出举例：
+
+15 .presto 
+facebook开发的分布式sql查询引擎，用来进行高速、实时的数据分析。解决了hive的MapReduce模型慢而且不能通过BI等工具展现hdfs数据的问题。presto本身不存储数据，它只是一个计算引擎，通过丰富的connector获取第三方的服务数据，并支持扩展。
+show catalogs
+show schema
+show table
+支持跨数据源查询
+
+14. MPP架构
+share nothing， 各个数据库模块由自己单独的CPU，MEMROY,DISK，且配置大小一样。
+
+
+

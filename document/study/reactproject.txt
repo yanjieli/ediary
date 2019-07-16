@@ -1,0 +1,11 @@
+1.npm install create-react-app -g
+2.create-react-app test
+3.cd test
+4.npm start
+
+
+
+
+kubectl delete service rexuitest-rexui
+kubectl expose deployment/rexuitest-rexui --type=NodePort --port 8897
+minikube service rexuitest-rexui --url
